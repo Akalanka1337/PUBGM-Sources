@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="34">
+  <CheatEntries/>
+  <UserdefinedSymbols/>
+  <LuaScript>dbk_initialize()
+dbk_useKernelmodeOpenProcess()
+dbk_useKernelmodeProcessMemoryAccess()
+ 
+if getOpenedProcessID() then openProcess(getOpenedProcessID()) end
+ 
+dbk_writesIgnoreWriteProtection(true)
+ 
+  function AOBRep(search, change)
+local aob = AOBScan(search)
+if aob then
+  for i=0,aob.Count-1 do
+    autoAssemble(aob[i]..':\ndb '..change)
+  end
+  aob.Destroy()
+end
+end
+ 
+ 
+EmuSelection = createForm(true)
+EmuSelection.Caption = 'Fly Man By Devil'
+EmuSelection.Width = 360
+EmuSelection.Height = 150
+ 
+function smartgaga()
+emu="AndroidProcess"
+startmenu()
+EmuSelection.hide()
+end
+SmartGaGaSel = createButton(EmuSelection)
+SmartGaGaSel.Left = 12
+SmartGaGaSel.Top = 61
+SmartGaGaSel.Width = 331
+SmartGaGaSel.Height = 33
+SmartGaGaSel.onClick = smartgaga
+SmartGaGaSel.Caption = 'SmartGaGa'
+ 
+function gameloop()
+ 
+emu= "aow_exe"
+startmenu()
+EmuSelection.hide()
+end
+GameloopSel = createButton(EmuSelection)
+GameloopSel.Left = 12
+GameloopSel.Top = 17
+GameloopSel.Width = 331
+GameloopSel.Height = 33
+GameloopSel.onClick = gameloop
+GameloopSel.Caption = 'Gameloop'
+ 
+ function ldplayer()
+emu="LdVBoxHeadless"
+startmenu()
+EmuSelection.hide()
+end
+LdPlayerSel = createButton(EmuSelection)
+LdPlayerSel .Left = 12
+LdPlayerSel .Top = 105
+LdPlayerSel .Width = 331
+LdPlayerSel .Height = 33
+LdPlayerSel .onClick = ldplayer
+LdPlayerSel .Caption = 'Ld Player'
+ 
+function startmenu()
+local p = io.popen('tasklist /fi "IMAGENAME eq '..emu..'.exe" /fi "MEMUSAGE gt 250000" /nh', 'r');
+local procInfo = p:read('*a');
+p:close();
+local pid = procInfo:match('%d+');
+pid = tonumber(pid);
+if(pid == nil)then
+messageDialog("Game Must Be Running!!", mtError, mbOK)
+os.exit()
+closeCE()
+else
+openProcess(pid)
+ 
+function byps()
+--devil
+searchPattern='00 00 75 C4 00 00 7A 45 9A 99 99 3E 00 00 04 00 04 00 00 00 00 00 A0 40 00'
+searchPattern1='10 27 00 00 10 27 00 00 20 4E 00 00 00 00 00 00 00 00 00 00 00 00 00 00'
+SPattern = AOBScan(searchPattern)
+if (SPattern == nil) then
+messageDialog(" FLY MAN VALUE NOT FOUND", mtError, mbOK)
+os.exit()
+closeCE()
+end
+ReplacePattern='00 00 70 C1 00 00 7A 45 9A 99 99 3E 00 00 04 00 04 00 00 00 00 00 A0 40 00' 
+ReplacePattern1='F4 01 00 00 10 27 00 00 20 4E 00 00 00 00 00 00 00 00 00 00 00 00 00 00'
+AOBRep(searchPattern,ReplacePattern)
+AOBRep(searchPattern1,ReplacePattern1)
+messageDialog("FLY MAN ACTIVATED", mtWarning, mbOK)
+end
+ 
+function deactive()
+--devil DEACTIVE FLYMAN
+searchPattern='00 00 70 C1 00 00 7A 45 9A 99 99 3E 00 00 04 00 04 00 00 00 00 00 A0 40 00'
+searchPattern1='F4 01 00 00 10 27 00 00 20 4E 00 00 00 00 00 00 00 00 00 00 00 00 00 00'
+SPattern = AOBScan(searchPattern)
+if (SPattern == nil) then
+messageDialog(" FLY MAN VALUE NOT FOUND", mtError, mbOK)
+os.exit()
+closeCE()
+end
+ReplacePattern='00 00 75 C4 00 00 7A 45 9A 99 99 3E 00 00 04 00 04 00 00 00 00 00 A0 40 00'
+ReplacePattern1='10 27 00 00 10 27 00 00 20 4E 00 00 00 00 00 00 00 00 00 00 00 00 00 00'
+AOBRep(searchPattern,ReplacePattern)
+AOBRep(searchPattern1,ReplacePattern1)
+messageDialog("FLY MAN DEACTIVATED", mtWarning, mbOK)
+end
+ 
+ 
+MainForm = createForm(true)
+MainForm.Caption = 'PUBG FLY MAN SCRIP BY itsdevil122'
+MainForm.Width = 417
+MainForm.Height = 200
+ 
+activatebtn = createButton(MainForm)
+activatebtn.Left = 11
+activatebtn.Top = 40
+activatebtn.Width = 395
+activatebtn.Height = 37
+activatebtn.onClick = byps
+activatebtn.Caption = 'ACTIVE FLY MAN'
+ 
+activatebtn = createButton(MainForm)
+activatebtn.Left = 11
+activatebtn.Top = 110
+activatebtn.Width = 395
+activatebtn.Height = 37
+activatebtn.onClick = deactive
+activatebtn.Caption = 'DEACTIVE FLY MAN'
+end
+end
+ 
+</LuaScript>
+</CheatTable>
